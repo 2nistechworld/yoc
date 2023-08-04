@@ -55,7 +55,7 @@ chmod +x install.sh
 And follow the instructions.
 
 ## YOC CLI Tool
-<img src="/images/yoc.gif" style=" width:50% " >
+<img src="/images/yoc.gif" width="500px" >
 
 ## How to get your Cloudflare API Key
 To get you API token go to https://dash.cloudflare.com/profile/api-tokens
