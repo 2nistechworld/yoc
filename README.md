@@ -65,3 +65,23 @@ To get you API token go to https://dash.cloudflare.com/profile/api-tokens
 <img src="/images/get-cf-api-key.png" style=" width:50% ; align:center " >
 
 - Continue to summary and save your API token
+
+## Files structure
+```
+yoc/
+├── compose_files
+│   ├── adguardhome.yaml
+│   ├── nextcloud.yaml
+│   ├── seafile.yaml
+│   ├── traefik.yaml
+│   ├── vaultwarden.yaml
+│   └── wg-easy.yaml
+├── containers_data
+│   ├── adguardhome
+│   ├── nextcloud
+│   ├── seafile
+│   ├── traefik
+│   ├── vaultwarden
+│   └── wireguard
+└── infos.txt
+```
