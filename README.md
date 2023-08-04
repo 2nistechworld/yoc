@@ -85,3 +85,14 @@ yoc/
 │   └── wireguard
 └── infos.txt
 ```
+## Thanks
+This project has been inspired by [YAMS](https://yams.media/)
+
+Also please support the developpers of:
+- [Traefik](https://traefik.io/traefik)
+- [Vaultwarden](https://github.com/dani-garcia/vaultwarden)
+- [Seafile](https://www.seafile.com/)
+- [Nextcloud](https://nextcloud.com/)
+- [wg-easy](https://github.com/wg-easy/wg-easy)
+- [AddGuard Home](https://adguard.com/)
+- [Immich](https://immich.app/)
