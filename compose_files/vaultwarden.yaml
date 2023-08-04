@@ -1,0 +1,24 @@
+---
+version: "3"
+networks:
+  yoc_network:
+    external: true
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    environment:
+      - SIGNUPS_ALLOWED=true
+      - DOMAIN=https://vaultwarden.${DOMAIN_NAME}
+    volumes:
+      - ${CONTAINERS_DATA}/vaultwarden:/data
+    ports:
+      - 80
+    restart: always
+    networks:
+      yoc_network:
+    labels:
+      - traefik.http.routers.vaultwarden.rule=Host(`vaultwarden.${DOMAIN_NAME}`)
+      - traefik.http.routers.vaultwarden.entrypoints=web-secure
+      - traefik.http.routers.vaultwarden.tls=true
+      - traefik.http.routers.vaultwarden.tls.certresolver=letsencrypt

@@ -1,0 +1,52 @@
+#!/bin/bash
+
+YOC_FOLDER=<YOC_FOLDER>
+COMPOSE_FILE=$(ls $YOC_FOLDER/compose_files/* | tr '\n' ':' | sed 's/:$//')
+export COMPOSE_FILE
+
+option=${1:-"--usage"}
+
+usage () {
+   echo "Usage: yoc --usage|restart|stop|start|update|status"
+   echo "--usage     display usage message"
+   echo "restart    restarts all services"
+   echo "stop       stops all services"
+   echo "start      starts services"
+   echo "update     update the containers and restart the services"
+   echo "status     display the status of the containers"
+}
+
+if [ $option == "--usage" ]; then
+    usage
+    exit 0
+fi
+
+if [ $option == "restart" ]; then
+    docker compose stop $2 && docker compose up -d $2
+    exit 0
+fi
+
+if [ $option == "stop" ]; then
+    docker compose stop $2
+    exit 0
+fi
+
+if [ $option == "start" ]; then
+    docker compose up -d $2
+    exit 0
+fi
+
+if [ $option == "update" ]; then
+    docker compose pull $2 && docker compose up -d $2
+    exit 0
+fi
+
+if [ $option == "delete" ]; then
+    docker compose rm $2
+    exit 0
+fi
+
+if [ $option == "status" ]; then
+    docker compose ps
+    exit 0
+fi

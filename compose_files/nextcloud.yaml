@@ -1,0 +1,52 @@
+---
+version: "3"
+networks:
+  yoc_network:
+    external: true
+services:
+  nextcloud-db:
+    image: mariadb
+    container_name: nextcloud-db
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+      - ${CONTAINERS_DATA}/nextcloud/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${NEXTCLOUD_ROOT_MYSQL_PASSWORD}
+      - MYSQL_PASSWORD={NEXTCLOUD_MYSQL_PASSWORD}
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    networks:
+      yoc_network:
+
+  nextcloud-redis:
+    image: redis:alpine
+    container_name: nextcloud-redis
+    restart: always
+    networks:
+      yoc_network:
+
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    ports:
+      - 8082:80
+    environment:
+      - MYSQL_PASSWORD=${NEXTCLOUD_MYSQL_PASSWORD}
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=nextcloud-db
+      - REDIS_HOST=nextcloud-redis
+      - NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.${DOMAIN_NAME}
+      - TRUSTED_PROXIES=traefik
+      - OVERWRITEPROTOCOL=https
+    volumes:
+      - ${CONTAINERS_DATA}/nextcloud/www:/var/www/html
+    restart: always
+    networks:
+      yoc_network:
+    labels:
+      - traefik.http.routers.nextcloud.rule=Host(`nextcloud.${DOMAIN_NAME}`)
+      - traefik.http.routers.nextcloud.entrypoints=web-secure
+      - traefik.http.routers.nextcloud.tls=true
+      - traefik.http.routers.nextcloud.tls.certresolver=letsencrypt

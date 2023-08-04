@@ -1,0 +1,27 @@
+---
+version: "3"
+networks:
+  yoc_network:
+    external: true
+services:
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 67:67/udp
+      - 853:853/tcp
+      - 853:853/udp
+      - 5443:5443/tcp
+      - 5443:5443/udp
+      - 8853:8853/udp
+      - 80:80
+      - 3000:3000
+    volumes:
+      - ${CONTAINERS_DATA}/adguardhome/work:/opt/adguardhome/work
+      - ${CONTAINERS_DATA}/adguardhome/conf:/opt/adguardhome/conf
+    restart: always
+    networks:
+      yoc_network:
+        ipv4_address: 172.19.0.53

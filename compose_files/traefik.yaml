@@ -1,0 +1,32 @@
+---
+version: "3"
+networks:
+  yoc_network:
+    external: true
+services:
+  traefik:
+    container_name: traefik
+    image: traefik:v2.10
+    command:
+      - --api.insecure=true
+      - --providers.docker
+      - --entryPoints.web-secure.address=:443
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.letsencrypt.acme.email=${EMAIL_ADDRESS}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN_NAME}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN_NAME}
+    environment:
+      - CF_DNS_API_TOKEN=${CLOUDFLARE_API_KEY}
+    ports:
+      - 443:443
+      # The Web UI (enabled by --api.insecure=true)
+      - 8080:8080
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CONTAINERS_DATA}/traefik/letsencrypt:/letsencrypt
+    restart: always
+    networks:
+      yoc_network:
