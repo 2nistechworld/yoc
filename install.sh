@@ -251,8 +251,9 @@ cp yoc $YOC_CLI
 sed -i "s;<YOC_FOLDER>;$YOC_FOLDER;g" $YOC_CLI
 chmod +x $YOC_CLI
 
+whiptail --title "YOC Installation" --msgbox "Configuration completed, the services will now start." 8 78
 #Start everything
-#yoc start
+yoc start
 
 whiptail --title "YOC Installation" --msgbox --scrolltext "$INFOS" 30 78
 whiptail --title "YOC Installation" --msgbox " All the informations are saved into $INFOS_TXT" 20 78
