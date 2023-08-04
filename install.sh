@@ -111,12 +111,11 @@ cp compose_files/.env $ENV_FILE
 #General
 sed -i "s;<EMAIL_ADDRESS>;$EMAIL_ADDRESS;g" $ENV_FILE
 sed -i "s;<CONTAINERS_DATA>;$CONTAINERS_DATA;g" $ENV_FILE
-sed -i "s;<EMAIL_ADDRESS>;$EMAIL_ADDRESS;g" $ENV_FILE
+sed -i "s;<DOMAIN_NAME>;$DOMAIN_NAME;g" $ENV_FILE
 
 if [[ $TRAEFIK == 1 ]]; then
   cp compose_files/traefik.yaml $COMPOSE_FILES_FOLDER
   sed -i "s;<CLOUDFLARE_API_KEY>;$CLOUDFLARE_API_KEY;g" $ENV_FILE
-  sed -i "s;<DOMAIN_NAME>;$DOMAIN_NAME;g" $ENV_FILE
 fi
 
 if [[ $VAULTWARDEN == 1 ]]; then
@@ -168,6 +167,7 @@ if [[ $ADGUARDHOME == 1 ]]; then
       echo "      answer: $SERVER_IP">> adguard_rewrites
     done < dns.list
   sed -ie '/rewrites/radguard_rewrites' $CONTAINERS_DATA/adguardhome/conf/AdGuardHome.yaml
+  sed -i "s;<EMAIL_ADDRESS>;$EMAIL_ADDRESS;g" $CONTAINERS_DATA/adguardhome/conf/AdGuardHome.yaml
 fi
 
 #Wg-Easy && AdguardHome

@@ -13,7 +13,7 @@ services:
       - ${CONTAINERS_DATA}/nextcloud/db:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${NEXTCLOUD_ROOT_MYSQL_PASSWORD}
-      - MYSQL_PASSWORD={NEXTCLOUD_MYSQL_PASSWORD}
+      - MYSQL_PASSWORD=${NEXTCLOUD_MYSQL_PASSWORD}
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
     networks:
