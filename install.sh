@@ -61,7 +61,7 @@ else
     exit 0
 fi
 
-EMAIL_ADDRESS=$(whiptail --title="YOC Installation" --inputbox "What's you email adress?" 8 78 3>&1 1>&2 2>&3)
+EMAIL_ADDRESS=$(whiptail --title="YOC Installation" --inputbox "What's your email address?" 8 78 3>&1 1>&2 2>&3)
 whiptail_cancel_escape
 
 SERVER_IP=$(ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | head -n 1 | awk '/inet/ {print $2}' | cut -d'/' -f1
