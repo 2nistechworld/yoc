@@ -1,6 +1,5 @@
 # YOC: Your Own Cloud
-
-<img src="" width="200px">
+<img src="/images/install.gif" width="500px">
 
 ## Description
 This installation Wizard will install the followings services depending of your choices using docker and docker compose
@@ -56,16 +55,7 @@ chmod +x install.sh
 And follow the instructions.
 
 ## YOC CLI Tool
-```
-# yoc
-Usage: yoc --usage|restart|stop|start|update|status
---usage     display usage message
-restart    restarts all services
-stop       stops all services
-start      starts services
-update     update the containers and restart the services
-status     display the status of the containers
-```
+<img src="/images/yoc.gif" style=" width:50% " >
 
 ## How to get your Cloudflare API Key
 To get you API token go to https://dash.cloudflare.com/profile/api-tokens
@@ -73,7 +63,6 @@ To get you API token go to https://dash.cloudflare.com/profile/api-tokens
 - Click Create Token
 - choose Edit zone DNS template
 - Configure like this with your own domain
-
-<img src="" style=" width:50px ; eight:50px " >
+<img src="/images/get-cf-api-key.png" style=" width:50% ; align:center " >
 
 - Continue to summary and save your API token
