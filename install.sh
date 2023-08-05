@@ -1,6 +1,13 @@
 #!/bin/bash
 source ./functions.sh
 
+##Check if YOC Already installed
+YOC_CLI=/usr/local/bin/yoc
+if [ -f "$YOC_CLI" ]; then
+    echo "YOC already installed, you may lost access to some services if started more than once."
+    exit 0
+fi
+
 #Pre-Check
 check_os_installed
 check_whiptail_is_installed
@@ -246,7 +253,6 @@ if [ -z "$CHECK_YOC_NETWORK" ]
 fi
 
 #Installation YOC CLI
-YOC_CLI=/usr/local/bin/yoc
 cp yoc $YOC_CLI
 sed -i "s;<YOC_FOLDER>;$YOC_FOLDER;g" $YOC_CLI
 chmod +x $YOC_CLI
