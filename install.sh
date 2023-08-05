@@ -4,7 +4,7 @@ source ./functions.sh
 ##Check if YOC Already installed
 YOC_CLI=/usr/local/bin/yoc
 if [ -f "$YOC_CLI" ]; then
-    echo "YOC already installed, you may lost access to some services if started more than once."
+    echo "YOC already installed, you may lost access to some services if started more than once, you can delete the file /usr/local/bin/yoc if you want to restart an installation from scratch."
     exit 0
 fi
 
