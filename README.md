@@ -3,13 +3,13 @@
 
 ## Description
 This installation Wizard will install the followings services depending of your choices using docker and docker compose
-- [Traefik](https://traefik.io/traefik)
-- [Vaultwarden](https://github.com/dani-garcia/vaultwarden)
-- [Seafile](https://www.seafile.com/)
-- [Nextcloud](https://nextcloud.com/)
-- [wg-easy](https://github.com/wg-easy/wg-easy)
-- [AddGuard Home](https://adguard.com/)
-- [Immich](https://immich.app/)
+- [Traefik](https://traefik.io/traefik): Reverse proxy manager, to make sure, you are not exposing your server to the public.
+- [Vaultwarden](https://github.com/dani-garcia/vaultwarden): Password manager, to store passwords, one time passwords for two factor authentication and secret documents and notes.
+- [Seafile](https://www.seafile.com/): Files storage, sync and sharing solution. A good self hosted equivalent of DropBox / OneDrive.
+- [Nextcloud](https://nextcloud.com/): All in one Cloud solution, for file storing and sharing, document collaboration, calendar and contact synchronisation, and much more.
+- [wg-easy](https://github.com/wg-easy/wg-easy): Wireguard VPN, to make sure, only certain people can access your services via a secure VPN.
+- [AdGuard Home](https://adguard.com/): Server side ad blocking, to remove ads and other malicious content before it reaches your computer. Can also act as a DNS/DHCP server.
+- [Immich](https://immich.app/): Photos library, to make photo collection easy, can include automatic face recognition, tagging, and much more, great Google/Apple photo alternative.
 
 ## OS Supported
 ### Debian
@@ -29,8 +29,8 @@ This installation Wizard will install the followings services depending of your 
     - If you install Traefik you will be asked if you want to use Cloudflare to perform a DNS Challenge for SSL Certificate with Let's Encrypt using your own domain, also you will be asked if you want to create DNS Record on Cloudflare for the services selected using your [Cloudflare API Key](https://github.com/2nistechworld/yoc#how-to-get-your-cloudflare-api-key).
     - If not, a local domain **yoc.local** will be used.
 - Create random password for the services selected.
-- If AddGuard Home is installed, DNS entries will be created for your services.
-- If AddGuard Home and Wireguard are installed, Wireguard will use Addguard Home as DNS server.
+- If AdGuard Home is installed, DNS entries will be created for your services.
+- If AdGuard Home and Wireguard are installed, Wireguard will use Addguard Home as DNS server.
 - [YOC CLI](https://github.com/2nistechworld/yoc#yoc-cli-tool) tools to manage your services 
 ## Dependencies
 - git
@@ -94,5 +94,5 @@ Also please support the developpers of:
 - [Seafile](https://www.seafile.com/)
 - [Nextcloud](https://nextcloud.com/)
 - [wg-easy](https://github.com/wg-easy/wg-easy)
-- [AddGuard Home](https://adguard.com/)
+- [AdGuard Home](https://adguard.com/)
 - [Immich](https://immich.app/)
