@@ -27,7 +27,65 @@ if [[ $? != 0 ]] ; then
   exit 0
 fi
 }
+chech_yoc_already_installed () {
+YOC_CLI=/usr/local/bin/yoc
+if [ -f "$YOC_CLI" ]; then
+  YOC_FOLDER=$(cat /usr/local/bin/yoc | grep "YOC_FOLDER=" | cut -d "=" -f2)
+  DOMAIN_NAME=$(cat $YOC_FOLDER/compose_files/.env | grep "DOMAIN_NAME=" | cut -d "=" -f2)
+  EMAIL_ADDRESS=$(cat $YOC_FOLDER/compose_files/.env | grep "EMAIL_ADDRESS=" | cut -d "=" -f2)
+  SERVICES_INSTALLED=$(ls $YOC_FOLDER/compose_files/)
 
+  if [[ $SERVICES_INSTALLED == *'seafile.yaml'* ]]; then
+    SEAFILE_ALREADY_INSTALLED=on
+  else
+    SEAFILE_ALREADY_INSTALLED=off
+  fi
+
+  if [[ $SERVICES_INSTALLED == *'adguardhome.yaml'* ]]; then
+    ADGUARDHOME_ALREADY_INSTALLED=on
+  else
+    ADGUARDHOME_ALREADY_INSTALLED=off
+  fi
+
+  if [[ $SERVICES_INSTALLED == *'traefik.yaml'* ]]; then
+    TRAEFIK_ALREADY_INSTALLED=on
+  else
+    TRAEFIK_ALREADY_INSTALLED=off
+  fi
+
+  if [[ $SERVICES_INSTALLED == *'wg-easy.yaml'* ]]; then
+    WG_EASY_ALREADY_INSTALLED=on
+  else
+    WG_EASY_ALREADY_INSTALLED=off
+  fi
+
+  if [[ $SERVICES_INSTALLED == *'nextcloud.yaml'* ]]; then
+    NETXCLOUD_ALREADY_INSTALLED=on
+  else
+    NETXCLOUD_ALREADY_INSTALLED=off
+  fi
+
+  if [[ $SERVICES_INSTALLED == *'immich.yaml'* ]]; then
+    IMMICH_ALREADY_INSTALLED=on
+   else
+    IMMICH_ALREADY_INSTALLED=off  
+  fi
+  
+  if [[ $SERVICES_INSTALLED == *'vaultwarden.yaml'* ]]; then
+    VAULTWARDEN_ALREADY_INSTALLED=on
+  else
+    VAULTWARDEN_ALREADY_INSTALLED=off
+  fi
+  else
+    SEAFILE_ALREADY_INSTALLED=off
+    ADGUARDHOME_ALREADY_INSTALLED=off
+    TRAEFIK_ALREADY_INSTALLED=off
+    WG_EASY_ALREADY_INSTALLED=off
+    NETXCLOUD_ALREADY_INSTALLED=off
+    IMMICH_ALREADY_INSTALLED=off
+    VAULTWARDEN_ALREADY_INSTALLED=off
+fi
+}
 ##Check if docker is installed
 check_if_docker_installed () {
 DOCKER_BIN=$(which docker)
@@ -87,7 +145,7 @@ fi
 if [[ $SEAFILE == 1 ]]; then
   echo "seafile.$DOMAIN_NAME" >> dns.list
 fi
-  
+
 if [[ $NEXTCLOUD == 1 ]]; then
   echo "nextcloud.$DOMAIN_NAME" >> dns.list
 fi

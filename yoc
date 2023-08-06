@@ -1,6 +1,7 @@
 #!/bin/bash
 
 YOC_FOLDER=<YOC_FOLDER>
+COMPOSE_FOLDER=$YOC_FOLDER/compose_files
 COMPOSE_FILE=$(ls $YOC_FOLDER/compose_files/* | tr '\n' ':' | sed 's/:$//')
 export COMPOSE_FILE
 
@@ -9,11 +10,14 @@ option=${1:-"--usage"}
 usage () {
    echo "Usage: yoc --usage|restart|stop|start|update|status"
    echo "--usage     display usage message"
-   echo "restart    restarts all services"
-   echo "stop       stops all services"
-   echo "start      starts services"
-   echo "update     update the containers and restart the services"
+   echo "restart    restarts all services or a specific one"
+   echo "stop       stops all services or a specific one"
+   echo "start      starts services or a specific one"
+   echo "update     update the containers and restart the services or a specific one"
    echo "status     display the status of the containers"
+   echo " "
+   echo "Exemple: yoc stop"
+   echo "Exemple: yoc start seafile"
 }
 
 if [ $option == "--usage" ]; then
@@ -22,28 +26,51 @@ if [ $option == "--usage" ]; then
 fi
 
 if [ $option == "restart" ]; then
-    docker compose stop $2 && docker compose up -d $2
-    exit 0
+    if [ -z "$2" ]; then
+        docker compose stop && docker compose up -d
+        exit 0
+    else
+        docker compose -f $COMPOSE_FOLDER/$2.yaml stop && docker compose -f $COMPOSE_FOLDER/$2.yaml up -d
+        exit 0
+    fi
 fi
 
 if [ $option == "stop" ]; then
-    docker compose stop $2
-    exit 0
+    if [ -z "$2" ]; then
+        docker compose stop
+        exit 0
+    else
+        docker compose -f $COMPOSE_FOLDER/$2.yaml stop
+        exit 0
+    fi
 fi
 
 if [ $option == "start" ]; then
-    docker compose up -d $2
-    exit 0
+    if [ -z "$2" ]; then
+        docker compose up -d
+        exit 0
+    else
+        docker compose -f $COMPOSE_FOLDER/$2.yaml up -d
+        exit 0
+    fi
 fi
 
 if [ $option == "update" ]; then
-    docker compose pull $2 && docker compose up -d $2
-    exit 0
+    if [ -z "$2" ]; then
+        docker compose pull && docker compose up -d
+        exit 0
+    else
+        docker compose -f $COMPOSE_FOLDER/$2.yaml pull && docker compose -f $COMPOSE_FOLDER/$2.yaml up -d
+        exit 0
+    fi
 fi
 
 if [ $option == "delete" ]; then
-    docker compose rm $2
-    exit 0
+    if [ -z "$2" ]; then
+        docker compose rm
+    else
+        docker compose -f $COMPOSE_FOLDER/$2.yaml rm
+    fi
 fi
 
 if [ $option == "status" ]; then

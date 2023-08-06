@@ -1,6 +1,14 @@
 # YOC: Your Own Cloud
 <img src="/images/install.gif" width="500px">
 
+## Updates
+2023-08-06: 
+- Add more informations into the README (thanks u/redoubledit)
+- Add .uninstall.sh script to delete YOC
+- Modify the beahavior when the script install.sh is launched on an already existing installation of YOC
+- Modify the yoc cli tool to be able to start / stop services using several containers
+    - **yoc stop seafile** will stop the three containers running Seafile.
+
 ## Description
 This installation Wizard will install the followings services depending of your choices using docker and docker compose
 - [Traefik](https://traefik.io/traefik): Reverse proxy manager, to make sure, you are not exposing your server to the public.
@@ -85,6 +93,7 @@ yoc/
 │   └── wireguard
 └── infos.txt
 ```
+
 ## Thanks
 This project has been inspired by [YAMS](https://yams.media/)
 
