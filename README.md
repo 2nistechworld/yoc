@@ -8,7 +8,7 @@ This installation Wizard will install the followings services depending of your 
 - [Seafile](https://www.seafile.com/)
 - [Nextcloud](https://nextcloud.com/)
 - [wg-easy](https://github.com/wg-easy/wg-easy)
-- [AddGuard Home](https://adguard.com/)
+- [AdGuard Home](https://adguard.com/)
 - [Immich](https://immich.app/)
 
 ## OS Supported
@@ -29,8 +29,8 @@ This installation Wizard will install the followings services depending of your 
     - If you install Traefik you will be asked if you want to use Cloudflare to perform a DNS Challenge for SSL Certificate with Let's Encrypt using your own domain, also you will be asked if you want to create DNS Record on Cloudflare for the services selected using your [Cloudflare API Key](https://github.com/2nistechworld/yoc#how-to-get-your-cloudflare-api-key).
     - If not, a local domain **yoc.local** will be used.
 - Create random password for the services selected.
-- If AddGuard Home is installed, DNS entries will be created for your services.
-- If AddGuard Home and Wireguard are installed, Wireguard will use Addguard Home as DNS server.
+- If AdGuard Home is installed, DNS entries will be created for your services.
+- If AdGuard Home and Wireguard are installed, Wireguard will use Addguard Home as DNS server.
 - [YOC CLI](https://github.com/2nistechworld/yoc#yoc-cli-tool) tools to manage your services 
 ## Dependencies
 - git
@@ -94,5 +94,5 @@ Also please support the developpers of:
 - [Seafile](https://www.seafile.com/)
 - [Nextcloud](https://nextcloud.com/)
 - [wg-easy](https://github.com/wg-easy/wg-easy)
-- [AddGuard Home](https://adguard.com/)
+- [AdGuard Home](https://adguard.com/)
 - [Immich](https://immich.app/)
