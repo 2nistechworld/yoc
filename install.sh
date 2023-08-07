@@ -125,12 +125,12 @@ fi
 #General
 sed -i "s;<EMAIL_ADDRESS>;$EMAIL_ADDRESS;g" $ENV_FILE
 sed -i "s;<CONTAINERS_DATA>;$CONTAINERS_DATA;g" $ENV_FILE
-sed -i "s;<DOMAIN_NAME>;$DOMAIN_NAME;g" $ENV_FILE
 
 if [[ $TRAEFIK_ALREADY_INSTALLED == off ]]; then
   if [[ $TRAEFIK == 1 ]]; then
     cp compose_files/traefik.yaml $COMPOSE_FILES_FOLDER
     sed -i "s;<CLOUDFLARE_API_KEY>;$CLOUDFLARE_API_KEY;g" $ENV_FILE
+    sed -i "s;<DOMAIN_NAME>;$DOMAIN_NAME;g" $ENV_FILE
   fi
 fi
 
@@ -175,6 +175,13 @@ if [[ $WG_EASY_ALREADY_INSTALLED == off ]]; then
     cp compose_files/wg-easy.yaml $COMPOSE_FILES_FOLDER
     WG_EASY_PASSWORD=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 35 ; echo '')
     sed -i "s;<WG_EASY_PASSWORD>;$WG_EASY_PASSWORD;g" $ENV_FILE
+        #Wg-Easy && AdguardHome
+    if [[ $ADGUARDHOME == 1 ]]
+      then
+      sed -i "s;<WG_DEFAULT_DNS>;172.8.0.53;g" $ENV_FILE
+      else
+      sed -i "s;<WG_DEFAULT_DNS>;1.1.1.1;g" $ENV_FILE
+    fi
   fi
 fi
 
@@ -197,15 +204,6 @@ if [[ $ADGUARDHOME_ALREADY_INSTALLED == off ]]; then
     sed -i "s;<EMAIL_ADDRESS>;$EMAIL_ADDRESS;g" $CONTAINERS_DATA/adguardhome/conf/AdGuardHome.yaml
   fi
 fi
-
-  #Wg-Easy && AdguardHome
-  if [[ $WG_EASY == 1 ]] && [[ $ADGUARDHOME == 1 ]]
-    then
-    sed -i "s;<WG_DEFAULT_DNS>;172.8.0.53;g" $ENV_FILE
-    else
-    sed -i "s;<WG_DEFAULT_DNS>;1.1.1.1;g" $ENV_FILE
-  fi
-
 
 ##Informations to display at the end
 INFOS_TXT=$YOC_FOLDER/infos.txt

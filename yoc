@@ -8,13 +8,15 @@ export COMPOSE_FILE
 option=${1:-"--usage"}
 
 usage () {
-   echo "Usage: yoc --usage|restart|stop|start|update|status"
+   echo "Usage: yoc --usage|restart|stop|start|update|status|delete|log"
    echo "--usage     display usage message"
-   echo "restart    restarts all services or a specific one"
-   echo "stop       stops all services or a specific one"
-   echo "start      starts services or a specific one"
-   echo "update     update the containers and restart the services or a specific one"
-   echo "status     display the status of the containers"
+   echo "restart    restart the container(s)"
+   echo "stop       stops the container(s)"
+   echo "start      start the container(s)"
+   echo "update     update the container(s)"
+   echo "status     display the status of the container(s)"
+   echo "delete     delete the container(s)"
+   echo "log        display the logs of the container(s)"
    echo " "
    echo "Exemple: yoc stop"
    echo "Exemple: yoc start seafile"
@@ -70,6 +72,14 @@ if [ $option == "delete" ]; then
         docker compose rm
     else
         docker compose -f $COMPOSE_FOLDER/$2.yaml rm
+    fi
+fi
+
+if [ $option == "log" ]; then
+    if [ -z "$2" ]; then
+        docker compose logs
+    else
+        docker compose -f $COMPOSE_FOLDER/$2.yaml logs
     fi
 fi
 

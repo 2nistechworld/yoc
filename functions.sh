@@ -76,6 +76,7 @@ if [ -f "$YOC_CLI" ]; then
   else
     VAULTWARDEN_ALREADY_INSTALLED=off
   fi
+  
   else
     SEAFILE_ALREADY_INSTALLED=off
     ADGUARDHOME_ALREADY_INSTALLED=off
