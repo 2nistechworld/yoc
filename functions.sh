@@ -248,7 +248,7 @@ configure_cloudflare () {
 
 create_domains_list
 
-PUBLIC_IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
+PUBLIC_IP=$(curl -s ifconfig.me)
 DNS_ENTRIES=$(cat dns.list)
 whiptail --title "YOC Installation" --yesno "Do you want to expose your services to internet? \nIf yes the followings DNS entries will be created:\n\n$DNS_ENTRIES\n\nTo your public IP $PUBLIC_IP on Cloudflare." 20 78
 if [[ $? -eq 0 ]]; then

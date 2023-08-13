@@ -70,9 +70,7 @@ if [ ! -f "$YOC_CLI" ]; then
   whiptail_cancel_escape
 fi  
 
-SERVER_IP=$(ip addr show $(ip route | awk '/default/ { print $5 }') | grep "inet" | head -n 1 | awk '/inet/ {print $2}' | cut -d'/' -f1
-)
-
+SERVER_IP=$(ip addr show $(ip route | grep -m1 "default via" | cut -d " " -f5) | grep "inet" | head -n 1 | awk '/inet/ {print $2}' | cut -d'/' -f1)
 
 if [[ $VAULTWARDEN_ALREADY_INSTALLED == off ]] && [[ $TRAEFIK_ALREADY_INSTALLED == off ]]; then
   #If Vaultwarden selected ask if we want to install Traefik for SSL
