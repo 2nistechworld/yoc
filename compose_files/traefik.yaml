@@ -15,8 +15,8 @@ services:
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.letsencrypt.acme.email=${EMAIL_ADDRESS}
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
-      - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN_NAME}
-      - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN_NAME}
+      - --entrypoints.web-secure.http.tls.domains[0].main=${DOMAIN_NAME}
+      - --entrypoints.web-secure.http.tls.domains[0].sans=*.${DOMAIN_NAME}
     environment:
       - CF_DNS_API_TOKEN=${CLOUDFLARE_API_KEY}
     ports:
