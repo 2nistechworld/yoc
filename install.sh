@@ -20,6 +20,8 @@ whiptail --title="YOC Installation" --checklist --separate-output "What do you w
 "Nextcloud" "DropBox Like with more functionnaliies." $NETXCLOUD_ALREADY_INSTALLED \
 "Immich" "Self-hosted photo and video backup solution" $IMMICH_ALREADY_INSTALLED \
 "Wg-Easy" "VPN Server using Wireguard" $WG_EASY_ALREADY_INSTALLED \
+"Audiobookshelf" "Audiobooks/Podcast and Ebook streaming" $AUDIOBOOKSHELF_ALREADY_INSTALLED \
+"HomeAssistant" "Open source home automation platform" $HOMEASSISTANT_ALREADY_INSTALLED \
 "AdguardHome" "AD Blocker DNS/DHCP Server" $ADGUARDHOME_ALREADY_INSTALLED 2>results
 whiptail_cancel_escape
 
@@ -46,6 +48,12 @@ while read choice
         ;;
       Immich)
         IMMICH=1
+        ;;
+      Audiobookshelf)
+        AUDIOBOOKSHELF=1
+        ;;
+      HomeAssistant)
+        HOMEASSISTANT=1
         ;;
       *)
       ;;
@@ -91,7 +99,7 @@ if  [[ $TRAEFIK_ALREADY_INSTALLED == off ]]; then
   #If Traefik selected ask if we want to use Cloudflare DNS for SSL
   if [[ $TRAEFIK == 1 ]]
   then
-    if [[ $NEXTCLOUD == 1 ]] || [[ $VAULTWARDEN == 1 ]] || [[ $SEAFILE == 1 ]] || [[ $IMMICH == 1 ]]
+    if [[ $NEXTCLOUD == 1 ]] || [[ $VAULTWARDEN == 1 ]] || [[ $SEAFILE == 1 ]] || [[ $IMMICH == 1 ]] || [[ $AUDIOBOOKSHELF == 1 ]] || [[ $HOMEASSISTANT == 1 ]]
     then
       whiptail --title "YOC Installation" --yesno "Do you want to use Cloudflare DNS to confgure SSL for Traefik?." 8 78
           if [[ $? -eq 0 ]]; then
@@ -203,6 +211,20 @@ if [[ $ADGUARDHOME_ALREADY_INSTALLED == off ]]; then
   fi
 fi
 
+if [[ $AUDIOBOOKSHELF_ALREADY_INSTALLED == off ]]; then
+  if [[ $AUDIOBOOKSHELF == 1 ]]; then
+    cp compose_files/audiobookshelf.yaml $COMPOSE_FILES_FOLDER
+  fi
+fi
+
+if [[ $HOMEASSISTANT_ALREADY_INSTALLED == off ]]; then
+  if [[ $HOMEASSISTANT == 1 ]]; then
+    cp compose_files/homeassistant.yaml $COMPOSE_FILES_FOLDER
+    mkdir -p $CONTAINERS_DATA/homeassistant
+    cp config_files/HomeAssistant.yaml $CONTAINERS_DATA/homeassistant/configuration.yaml
+    touch $CONTAINERS_DATA/homeassistant/{automations.yaml,scripts.yaml,scenes.yaml}
+  fi
+fi
 ##Informations to display at the end
 INFOS_TXT=$YOC_FOLDER/infos.txt
 if [ ! -f "$YOC_CLI" ]; then
@@ -272,6 +294,22 @@ if [[ $ADGUARDHOME_ALREADY_INSTALLED == off ]]; then
     echo "AdGuard Home Username: $EMAIL_ADDRESS" >> $INFOS_TXT
     echo "AdGuard Home Password: $ADGUARDHOME_PASSWORD" >> $INFOS_TXT
     echo "You can use $SERVER_IP as DNS Server to resolve localy $DOMAIN_NAME" >> $INFOS_TXT
+    echo " " >> $INFOS_TXT
+  fi
+fi
+
+if [[ $AUDIOBOOKSHELF_ALREADY_INSTALLED == off ]]; then
+  if [[ $AUDIOBOOKSHELF == 1 ]]; then
+    echo "Audiobookshelf" >> $INFOS_TXT
+    echo "URL: https://audiobookshelf.$DOMAIN_NAME or http://$SERVER_IP:13378" >> $INFOS_TXT
+    echo " " >> $INFOS_TXT
+  fi
+fi
+
+if [[ $HOMEASSISTANT_ALREADY_INSTALLED == off ]]; then
+  if [[ $HOMEASSISTANT == 1 ]]; then
+    echo "Home Assistant" >> $INFOS_TXT
+    echo "URL: https://homeassistant.$DOMAIN_NAME or http://$SERVER_IP:8123" >> $INFOS_TXT
     echo " " >> $INFOS_TXT
   fi
 fi

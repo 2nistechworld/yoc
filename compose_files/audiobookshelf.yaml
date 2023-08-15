@@ -1,0 +1,23 @@
+---
+version: "3"
+networks:
+  yoc_network:
+    external: true
+services: 
+  audiobookshelf:
+    container_name: audiobookshelf
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    ports:
+      - 13378:80
+    volumes:
+      - ${CONTAINERS_DATA}/audiobookshelf/audiobooks:/audiobooks
+      - ${CONTAINERS_DATA}/audiobookshelf/podcasts:/podcasts
+      - ${CONTAINERS_DATA}/audiobookshelf/config:/config
+      - ${CONTAINERS_DATA}/audiobookshelf/metadata:/metadata
+    networks:
+      yoc_network:
+    labels:
+      - traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.${DOMAIN_NAME}`)
+      - traefik.http.routers.audiobookshelf.entrypoints=web-secure
+      - traefik.http.routers.audiobookshelf.tls=true
+      - traefik.http.routers.audiobookshelf.tls.certresolver=letsencrypt
