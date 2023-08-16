@@ -20,6 +20,8 @@ This installation Wizard will install the followings services depending of your 
 - [wg-easy](https://github.com/wg-easy/wg-easy): Wireguard VPN, to make sure, only certain people can access your services via a secure VPN.
 - [AdGuard Home](https://adguard.com/): Server side ad blocking, to remove ads and other malicious content before it reaches your computer. Can also act as a DNS/DHCP server.
 - [Immich](https://immich.app/): Photos library, to make photo collection easy, can include automatic face recognition, tagging, and much more, great Google/Apple photo alternative.
+- [Audiobookshelf](https://www.audiobookshelf.org/): Self-hosted audiobook and podcast server.
+- [Home Assistant](https://www.home-assistant.io/): Open source home automation that puts local control and privacy first.
 
 ## OS Supported
 ### Debian
