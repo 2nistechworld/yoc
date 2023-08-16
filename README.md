@@ -4,6 +4,7 @@
 ## Updates
 2023-08-15: 
 - Add Audiobookshelf and Home Assistant
+
 2023-08-06: 
 - Add more informations into the README (thanks u/redoubledit)
 - Add .uninstall.sh script to delete YOC
