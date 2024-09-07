@@ -1,5 +1,4 @@
 ---
-version: "3"
 networks:
   yoc_network:
     external: true
@@ -10,6 +9,10 @@ services:
     environment:
       - SIGNUPS_ALLOWED=true
       - DOMAIN=https://vaultwarden.${DOMAIN_NAME}
+      - PUSH_ENABLED=true
+      - PUSH_INSTALLATION_ID=${PUSH_INSTALLATION_ID}
+      - PUSH_INSTALLATION_KEY=${PUSH_INSTALLATION_KEY}
+      - PUSH_RELAY_BASE_URI=https://push.bitwarden.com
     volumes:
       - ${CONTAINERS_DATA}/vaultwarden:/data
     ports:
@@ -19,6 +22,6 @@ services:
       yoc_network:
     labels:
       - traefik.http.routers.vaultwarden.rule=Host(`vaultwarden.${DOMAIN_NAME}`)
-      - traefik.http.routers.vaultwarden.entrypoints=web-secure
+      - traefik.http.routers.vaultwarden.entrypoints=websecure
       - traefik.http.routers.vaultwarden.tls=true
       - traefik.http.routers.vaultwarden.tls.certresolver=letsencrypt

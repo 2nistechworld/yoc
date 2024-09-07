@@ -1,5 +1,4 @@
 ---
-version: "3"
 networks:
   yoc_network:
     external: true
@@ -10,13 +9,13 @@ services:
     command:
       - --api.insecure=true
       - --providers.docker
-      - --entryPoints.web-secure.address=:443
+      - --entryPoints.websecure.address=:443
       - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.letsencrypt.acme.email=${EMAIL_ADDRESS}
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
-      - --entrypoints.web-secure.http.tls.domains[0].main=${DOMAIN_NAME}
-      - --entrypoints.web-secure.http.tls.domains[0].sans=*.${DOMAIN_NAME}
+      - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN_NAME}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN_NAME}
     environment:
       - CF_DNS_API_TOKEN=${CLOUDFLARE_API_KEY}
     ports:

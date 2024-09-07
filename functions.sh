@@ -27,6 +27,7 @@ if [[ $? != 0 ]] ; then
   exit 0
 fi
 }
+
 chech_yoc_already_installed () {
 YOC_CLI=/usr/local/bin/yoc
 if [ -f "$YOC_CLI" ]; then
@@ -53,7 +54,7 @@ if [ -f "$YOC_CLI" ]; then
     TRAEFIK_ALREADY_INSTALLED=off
   fi
 
-  if [[ $SERVICES_INSTALLED == *'wg-easy.yaml'* ]]; then
+  if [[ $SERVICES_INSTALLED == *'wg_easy.yaml'* ]]; then
     WG_EASY_ALREADY_INSTALLED=on
   else
     WG_EASY_ALREADY_INSTALLED=off
@@ -77,18 +78,18 @@ if [ -f "$YOC_CLI" ]; then
     VAULTWARDEN_ALREADY_INSTALLED=off
   fi
 
-  if [[ $SERVICES_INSTALLED == *'audiobookshelf.yaml'* ]]; then
-    AUDIOBOOKSHELF_ALREADY_INSTALLED=on
-  else
-    AUDIOBOOKSHELF_ALREADY_INSTALLED=off
-  fi
-
   if [[ $SERVICES_INSTALLED == *'homeassistant.yaml'* ]]; then
     HOMEASSISTANT_ALREADY_INSTALLED=on
   else
     HOMEASSISTANT_ALREADY_INSTALLED=off
   fi
 
+  if [[ $SERVICES_INSTALLED == *'audiobookshelf.yaml'* ]]; then
+    AUDIOBOOKSHELF_ALREADY_INSTALLED=on
+  else
+    AUDIOBOOKSHELF_ALREADY_INSTALLED=off
+  fi
+  
   else
     SEAFILE_ALREADY_INSTALLED=off
     ADGUARDHOME_ALREADY_INSTALLED=off
@@ -97,10 +98,11 @@ if [ -f "$YOC_CLI" ]; then
     NETXCLOUD_ALREADY_INSTALLED=off
     IMMICH_ALREADY_INSTALLED=off
     VAULTWARDEN_ALREADY_INSTALLED=off
-    AUDIOBOOKSHELF_ALREADY_INSTALLED=off
     HOMEASSISTANT_ALREADY_INSTALLED=off
+    AUDIOBOOKSHELF_ALREADY_INSTALLED=off
 fi
 }
+
 ##Check if docker is installed
 check_if_docker_installed () {
 DOCKER_BIN=$(which docker)
@@ -173,14 +175,12 @@ if [[ $IMMICH == 1 ]]; then
   echo "immich.$DOMAIN_NAME" >> dns.list
 fi
 
-if [[ $AUDIOBOOKSHELF == 1 ]]; then
-  echo "audiobookshelf.$DOMAIN_NAME" >> dns.list
-fi
-
 if [[ $HOMEASSISTANT == 1 ]]; then
   echo "homeassistant.$DOMAIN_NAME" >> dns.list
 fi
-
+if [[ $AUDIOBOOKSHELF == 1 ]]; then
+  echo "audiobookshelf.$DOMAIN_NAME" >> dns.list
+fi
 }
 
 #Ceate DNS entries in CLoudflare DNS
@@ -248,6 +248,14 @@ install_wg_easy_or_adguardghome () {
           exit 0
         fi
     fi
+}
+
+configure_vaultwarden () {
+    whiptail --title "YOC Installation - Vaultwarden" --msgbox "To configure the push notification for mobile devices\nGo to https://bitwarden.com/host/ and follow the steps to get your key and ID." 8 78
+    PUSH_INSTALLATION_ID=$(whiptail --title="YOC Installation - Vaultwarden" --inputbox "Installation ID:" 8 78 3>&1 1>&2 2>&3)
+    whiptail_cancel_escape
+    PUSH_INSTALLATION_KEY=$(whiptail --title="YOC Installation - Vaultwarden" --inputbox "Installation Key:" 8 78 3>&1 1>&2 2>&3)
+    whiptail_cancel_escape
 }
 
 configure_cloudflare () {

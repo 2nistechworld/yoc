@@ -2,7 +2,13 @@
 <img src="/images/install.gif" width="500px">
 
 ## Updates
-2023-08-15: 
+2024-07-07: 
+- Update Seafile to Version 11
+- Update Immich docker compose configuration
+- Add Vaultwarden [Mobile Client push notification](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-Mobile-Client-push-notification)
+- update wg-easy docker image
+
+2023-08-15:
 - Add Audiobookshelf and Home Assistant
 
 2023-08-06: 
@@ -21,8 +27,6 @@ This installation Wizard will install the followings services depending of your 
 - [wg-easy](https://github.com/wg-easy/wg-easy): Wireguard VPN, to make sure, only certain people can access your services via a secure VPN.
 - [AdGuard Home](https://adguard.com/): Server side ad blocking, to remove ads and other malicious content before it reaches your computer. Can also act as a DNS/DHCP server.
 - [Immich](https://immich.app/): Photos library, to make photo collection easy, can include automatic face recognition, tagging, and much more, great Google/Apple photo alternative.
-- [Audiobookshelf](https://www.audiobookshelf.org/): Self-hosted audiobook and podcast server.
-- [Home Assistant](https://www.home-assistant.io/): Open source home automation that puts local control and privacy first.
 
 ## OS Supported
 ### Debian
@@ -84,6 +88,8 @@ To get you API token go to https://dash.cloudflare.com/profile/api-tokens
 yoc/
 ├── compose_files
 │   ├── adguardhome.yaml
+|   ├── audiobookshelf.yaml
+|   ├── immich.yaml
 │   ├── nextcloud.yaml
 │   ├── seafile.yaml
 │   ├── traefik.yaml
@@ -91,6 +97,8 @@ yoc/
 │   └── wg-easy.yaml
 ├── containers_data
 │   ├── adguardhome
+|   ├── audiobookshelf
+|   ├── immich
 │   ├── nextcloud
 │   ├── seafile
 │   ├── traefik

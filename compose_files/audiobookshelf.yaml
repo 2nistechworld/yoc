@@ -1,5 +1,4 @@
 ---
-version: "3"
 networks:
   yoc_network:
     external: true
@@ -18,6 +17,6 @@ services:
       yoc_network:
     labels:
       - traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.${DOMAIN_NAME}`)
-      - traefik.http.routers.audiobookshelf.entrypoints=web-secure
+      - traefik.http.routers.audiobookshelf.entrypoints=websecure
       - traefik.http.routers.audiobookshelf.tls=true
       - traefik.http.routers.audiobookshelf.tls.certresolver=letsencrypt

@@ -1,11 +1,10 @@
 ---
-version: "3"
 networks:
   yoc_network:
     external: true
 services:
-  db:
-    image: mariadb:10.6
+  seafile-db:
+    image: mariadb:10.11
     container_name: seafile-db
     environment:
       - MYSQL_ROOT_PASSWORD=${SEAFILE_MYSQL_PASSWORD}
@@ -25,26 +24,27 @@ services:
       yoc_network:
 
   seafile:
-    image: seafileltd/seafile-mc:latest
+    image: seafileltd/seafile-mc:11.0.11
     container_name: seafile
     ports:
-      - 8081:80
+      - 80
     volumes:
       - ${CONTAINERS_DATA}/seafile/shared:/shared
     environment:
-      - DB_HOST=db
+      - DB_HOST=seafile-db
       - DB_ROOT_PASSWD=${SEAFILE_MYSQL_PASSWORD}
       - SEAFILE_ADMIN_EMAIL=${EMAIL_ADDRESS}
       - SEAFILE_ADMIN_PASSWORD=${SEAFILE_ADMIN_PASSWORD}
       - SEAFILE_SERVER_HOSTNAME=seafile.${DOMAIN_NAME}
+      - CSRF_TRUSTED_ORIGINS=seafile.${DOMAIN_NAME}
     depends_on:
-      - db
+      - seafile-db
       - memcached
     restart: always
     networks:
       yoc_network:
     labels:
       - traefik.http.routers.seafile.rule=Host(`seafile.${DOMAIN_NAME}`)
-      - traefik.http.routers.seafile.entrypoints=web-secure
+      - traefik.http.routers.seafile.entrypoints=websecure
       - traefik.http.routers.seafile.tls=true
       - traefik.http.routers.seafile.tls.certresolver=letsencrypt

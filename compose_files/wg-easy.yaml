@@ -1,5 +1,4 @@
 ---
-version: "3"
 networks:
   yoc_network:
     external: true
@@ -10,7 +9,7 @@ services:
       - WG_HOST=vpn.${DOMAIN_NAME}
       - WG_PORT=51820
       - WG_DEFAULT_DNS=${WG_DEFAULT_DNS}
-    image: weejewel/wg-easy
+    image: ghcr.io/wg-easy/wg-easy
     container_name: wg-easy
     volumes:
       - ${CONTAINERS_DATA}/wireguard:/etc/wireguard
@@ -25,4 +24,4 @@ services:
       - net.ipv4.conf.all.src_valid_mark=1
     restart: always
     networks:
-      yoc_network:      
+      yoc_network:

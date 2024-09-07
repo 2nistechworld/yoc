@@ -20,13 +20,13 @@ whiptail --title="YOC Installation" --checklist --separate-output "What do you w
 "Nextcloud" "DropBox Like with more functionnaliies." $NETXCLOUD_ALREADY_INSTALLED \
 "Immich" "Self-hosted photo and video backup solution" $IMMICH_ALREADY_INSTALLED \
 "Wg-Easy" "VPN Server using Wireguard" $WG_EASY_ALREADY_INSTALLED \
+"HomeAssistant" "Domotic platform" $HOMEASSISTANT_ALREADY_INSTALLED \
 "Audiobookshelf" "Audiobooks/Podcast and Ebook streaming" $AUDIOBOOKSHELF_ALREADY_INSTALLED \
-"HomeAssistant" "Open source home automation platform" $HOMEASSISTANT_ALREADY_INSTALLED \
 "AdguardHome" "AD Blocker DNS/DHCP Server" $ADGUARDHOME_ALREADY_INSTALLED 2>results
 whiptail_cancel_escape
 
 while read choice
-  do
+do
     case $choice in
        Traefik)
         TRAEFIK=1      
@@ -43,25 +43,24 @@ while read choice
       Wg-Easy)
         WG_EASY=1
         ;;
+      HomeAssistant)
+        HOMEASSISTANT=1
+        ;;
+      Audiobookshelf)
+        AUDIOBOOKSHELF=1
+        ;;                
       AdguardHome)
-        ADGUARDHOME=1
+        AUDIOBOOKSHELF=1
         ;;
       Immich)
         IMMICH=1
         ;;
-      Audiobookshelf)
-        AUDIOBOOKSHELF=1
-        ;;
-      HomeAssistant)
-        HOMEASSISTANT=1
-        ;;
       *)
       ;;
     esac
-  done < results
+done < results
   
 ##Questions
-
 if [ ! -f "$YOC_CLI" ]; then
   YOC_FOLDER=$(whiptail --title="YOC Installation" --inputbox "Where do you want to install YOC? default [/opt/yoc] " 8 78 3>&1 1>&2 2>&3)
   if [[ $? == 0 ]] ; then
@@ -99,7 +98,7 @@ if  [[ $TRAEFIK_ALREADY_INSTALLED == off ]]; then
   #If Traefik selected ask if we want to use Cloudflare DNS for SSL
   if [[ $TRAEFIK == 1 ]]
   then
-    if [[ $NEXTCLOUD == 1 ]] || [[ $VAULTWARDEN == 1 ]] || [[ $SEAFILE == 1 ]] || [[ $IMMICH == 1 ]] || [[ $AUDIOBOOKSHELF == 1 ]] || [[ $HOMEASSISTANT == 1 ]]
+    if [[ $NEXTCLOUD == 1 ]] || [[ $VAULTWARDEN == 1 ]] || [[ $SEAFILE == 1 ]] || [[ $IMMICH == 1 ]] || [[ $HOMEASSISTANT == 1 ]] || [[ $AUDIOBOOKSHELF == 1 ]]
     then
       whiptail --title "YOC Installation" --yesno "Do you want to use Cloudflare DNS to confgure SSL for Traefik?." 8 78
           if [[ $? -eq 0 ]]; then
@@ -110,7 +109,7 @@ if  [[ $TRAEFIK_ALREADY_INSTALLED == off ]]; then
             create_domains_list
             install_wg_easy_or_adguardghome          
           elif [[ $? -eq 255 ]]; then 
-            whiptail --title "YOC Installation" --msgbox "User pressed ESC. Exiting the script" 8 78 
+            whiptail --title "YOC Installation" --msgbox "User pressed ESC. Exiting the script" 8 78
           fi
     fi
   fi
@@ -143,6 +142,9 @@ fi
 if [[ $VAULTWARDEN_ALREADY_INSTALLED == off ]]; then
   if [[ $VAULTWARDEN == 1 ]]; then
     cp compose_files/vaultwarden.yaml $COMPOSE_FILES_FOLDER
+    configure_vaultwarden
+    sed -i "s;<PUSH_INSTALLATION_ID>;$PUSH_INSTALLATION_ID;g" $ENV_FILE
+    sed -i "s;<PUSH_INSTALLATION_KEY>;$PUSH_INSTALLATION_KEY;g" $ENV_FILE
   fi
 fi
 
@@ -168,17 +170,15 @@ fi
 
 if [[ $IMMICH_ALREADY_INSTALLED == off ]]; then
   if [[ $IMMICH == 1 ]]; then
-    IMMICH_TYPESENSE_API_KEY=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 35 ; echo '')
     IMMICH_DB_PASSWORD=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 35 ; echo '')
     cp compose_files/immich.yaml $COMPOSE_FILES_FOLDER
     sed -i "s;<IMMICH_DB_PASSWORD>;$IMMICH_DB_PASSWORD;g" $ENV_FILE
-    sed -i "s;<IMMICH_TYPESENSE_API_KEY>;$IMMICH_TYPESENSE_API_KEY;g" $ENV_FILE
   fi
 fi
 
 if [[ $WG_EASY_ALREADY_INSTALLED == off ]]; then
   if [[ $WG_EASY == 1 ]]; then
-    cp compose_files/wg-easy.yaml $COMPOSE_FILES_FOLDER
+    cp compose_files/wg_easy.yaml $COMPOSE_FILES_FOLDER
     WG_EASY_PASSWORD=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 35 ; echo '')
     sed -i "s;<WG_EASY_PASSWORD>;$WG_EASY_PASSWORD;g" $ENV_FILE
         #Wg-Easy && AdguardHome
@@ -211,12 +211,6 @@ if [[ $ADGUARDHOME_ALREADY_INSTALLED == off ]]; then
   fi
 fi
 
-if [[ $AUDIOBOOKSHELF_ALREADY_INSTALLED == off ]]; then
-  if [[ $AUDIOBOOKSHELF == 1 ]]; then
-    cp compose_files/audiobookshelf.yaml $COMPOSE_FILES_FOLDER
-  fi
-fi
-
 if [[ $HOMEASSISTANT_ALREADY_INSTALLED == off ]]; then
   if [[ $HOMEASSISTANT == 1 ]]; then
     cp compose_files/homeassistant.yaml $COMPOSE_FILES_FOLDER
@@ -225,6 +219,13 @@ if [[ $HOMEASSISTANT_ALREADY_INSTALLED == off ]]; then
     touch $CONTAINERS_DATA/homeassistant/{automations.yaml,scripts.yaml,scenes.yaml}
   fi
 fi
+
+if [[ $AUDIOBOOKSHELF_ALREADY_INSTALLED == off ]]; then
+  if [[ $AUDIOBOOKSHELF == 1 ]]; then
+    cp compose_files/audiobookshelf.yaml $COMPOSE_FILES_FOLDER
+  fi
+fi
+
 ##Informations to display at the end
 INFOS_TXT=$YOC_FOLDER/infos.txt
 if [ ! -f "$YOC_CLI" ]; then
@@ -298,18 +299,18 @@ if [[ $ADGUARDHOME_ALREADY_INSTALLED == off ]]; then
   fi
 fi
 
-if [[ $AUDIOBOOKSHELF_ALREADY_INSTALLED == off ]]; then
-  if [[ $AUDIOBOOKSHELF == 1 ]]; then
-    echo "Audiobookshelf" >> $INFOS_TXT
-    echo "URL: https://audiobookshelf.$DOMAIN_NAME or http://$SERVER_IP:13378" >> $INFOS_TXT
-    echo " " >> $INFOS_TXT
-  fi
-fi
-
 if [[ $HOMEASSISTANT_ALREADY_INSTALLED == off ]]; then
   if [[ $HOMEASSISTANT == 1 ]]; then
     echo "Home Assistant" >> $INFOS_TXT
     echo "URL: https://homeassistant.$DOMAIN_NAME or http://$SERVER_IP:8123" >> $INFOS_TXT
+    echo " " >> $INFOS_TXT
+  fi
+fi
+
+if [[ $AUDIOBOOKSHELF_ALREADY_INSTALLED == off ]]; then
+  if [[ $AUDIOBOOKSHELF == 1 ]]; then
+    echo "Audiobookshelf" >> $INFOS_TXT
+    echo "URL: https://audiobookshelf.$DOMAIN_NAME or http://$SERVER_IP:13378" >> $INFOS_TXT
     echo " " >> $INFOS_TXT
   fi
 fi
@@ -331,6 +332,16 @@ chmod +x $YOC_CLI
 whiptail --title "YOC Installation" --msgbox "Configuration completed, the services will now start." 8 78
 #Start everything
 yoc start
+
+#Edit seafile config file
+if [[ $SEAFILE_ALREADY_INSTALLED == off ]]; then
+  if [[ $SEAFILE == 1 ]]; then
+    sleep 40
+    yoc stop seafile
+    echo 'CSRF_TRUSTED_ORIGINS = ["https://seafile.'$DOMAIN_NAME'"]' >> $CONTAINERS_DATA/seafile/shared/seafile/conf/seahub_settings.py
+    yoc start seafile
+  fi
+fi
 
 whiptail --title "YOC Installation" --msgbox --scrolltext "$INFOS" 30 78
 whiptail --title "YOC Installation" --msgbox " All the informations are saved into $INFOS_TXT" 20 78

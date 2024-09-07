@@ -1,5 +1,4 @@
 ---
-version: "3"
 networks:
   yoc_network:
     external: true
@@ -18,6 +17,6 @@ services:
     labels:
       - traefik.http.routers.hahttp.rule=Host(`homeassistant.${DOMAIN_NAME}`)
       - traefik.http.routers.homeassistant.rule=Host(`homeassistant.${DOMAIN_NAME}`)
-      - traefik.http.routers.homeassistant.entrypoints=web-secure
+      - traefik.http.routers.homeassistant.entrypoints=websecure
       - traefik.http.routers.homeassistant.tls=true
       - traefik.http.routers.homeassistant.tls.certresolver=letsencrypt
