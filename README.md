@@ -2,7 +2,10 @@
 <img src="/images/install.gif" width="500px">
 
 ## Updates
-2024-07-07: 
+2024-09-08: 
+- Add paperless-ngx
+
+2024-09-07: 
 - Update Seafile to Version 11
 - Update Immich docker compose configuration
 - Add Vaultwarden [Mobile Client push notification](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-Mobile-Client-push-notification)
@@ -27,6 +30,7 @@ This installation Wizard will install the followings services depending of your 
 - [wg-easy](https://github.com/wg-easy/wg-easy): Wireguard VPN, to make sure, only certain people can access your services via a secure VPN.
 - [AdGuard Home](https://adguard.com/): Server side ad blocking, to remove ads and other malicious content before it reaches your computer. Can also act as a DNS/DHCP server.
 - [Immich](https://immich.app/): Photos library, to make photo collection easy, can include automatic face recognition, tagging, and much more, great Google/Apple photo alternative.
+- [Paperless-ngx](https://docs.paperless-ngx.com/): Paperless-ngx is a community-supported open-source document management system that transforms your physical documents into a searchable online archive so you can keep, well, less paper.
 
 ## OS Supported
 ### Debian
@@ -94,6 +98,7 @@ yoc/
 │   ├── seafile.yaml
 │   ├── traefik.yaml
 │   ├── vaultwarden.yaml
+│   ├── paperless-ngx.yaml
 │   └── wg-easy.yaml
 ├── containers_data
 │   ├── adguardhome
@@ -103,6 +108,7 @@ yoc/
 │   ├── seafile
 │   ├── traefik
 │   ├── vaultwarden
+│   ├── paperless-ngx
 │   └── wireguard
 └── infos.txt
 ```
@@ -118,3 +124,4 @@ Also please support the developpers of:
 - [wg-easy](https://github.com/wg-easy/wg-easy)
 - [AdGuard Home](https://adguard.com/)
 - [Immich](https://immich.app/)
+- [Paperless-ngx](https://docs.paperless-ngx.com/)

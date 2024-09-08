@@ -90,6 +90,12 @@ if [ -f "$YOC_CLI" ]; then
     AUDIOBOOKSHELF_ALREADY_INSTALLED=off
   fi
   
+    if [[ $SERVICES_INSTALLED == *'paperless-ngx.yaml'* ]]; then
+    PAPERLESS_ALREADY_INSTALLED=on
+  else
+    PAPERLESS_ALREADY_INSTALLED=off
+  fi
+
   else
     SEAFILE_ALREADY_INSTALLED=off
     ADGUARDHOME_ALREADY_INSTALLED=off
@@ -100,6 +106,7 @@ if [ -f "$YOC_CLI" ]; then
     VAULTWARDEN_ALREADY_INSTALLED=off
     HOMEASSISTANT_ALREADY_INSTALLED=off
     AUDIOBOOKSHELF_ALREADY_INSTALLED=off
+    PAPERLESS_ALREADY_INSTALLED=off
 fi
 }
 
@@ -180,6 +187,9 @@ if [[ $HOMEASSISTANT == 1 ]]; then
 fi
 if [[ $AUDIOBOOKSHELF == 1 ]]; then
   echo "audiobookshelf.$DOMAIN_NAME" >> dns.list
+fi
+if [[ $PAPERLESS == 1 ]]; then
+  echo "paperless-ngx.$DOMAIN_NAME" >> dns.list
 fi
 }
 
