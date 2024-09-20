@@ -9,7 +9,7 @@ services:
     environment:
       - SIGNUPS_ALLOWED=true
       - DOMAIN=https://vaultwarden.${DOMAIN_NAME}
-      - PUSH_ENABLED=true
+      - PUSH_ENABLED=${PUSH_ENABLED}
       - PUSH_INSTALLATION_ID=${PUSH_INSTALLATION_ID}
       - PUSH_INSTALLATION_KEY=${PUSH_INSTALLATION_KEY}
       - PUSH_RELAY_BASE_URI=https://push.bitwarden.com

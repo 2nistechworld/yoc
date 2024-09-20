@@ -2,6 +2,11 @@
 <img src="/images/install.gif" width="500px">
 
 ## Updates
+2024-09-20: 
+- Add Owncloud
+- Update Traefik configuration for Nextcloud
+- Ask if you want to use Mobile Client push notification with Vaultwarden.
+
 2024-09-08: 
 - Add paperless-ngx
 
@@ -27,6 +32,7 @@ This installation Wizard will install the followings services depending of your 
 - [Vaultwarden](https://github.com/dani-garcia/vaultwarden): Password manager, to store passwords, one time passwords for two factor authentication and secret documents and notes.
 - [Seafile](https://www.seafile.com/): Files storage, sync and sharing solution. A good self hosted equivalent of DropBox / OneDrive.
 - [Nextcloud](https://nextcloud.com/): All in one Cloud solution, for file storing and sharing, document collaboration, calendar and contact synchronisation, and much more.
+- [Owncloud](https://owncloud.com/): Open-source file sync, share and content collaboration software that lets teams work on data easily from anywhere, on any device.
 - [wg-easy](https://github.com/wg-easy/wg-easy): Wireguard VPN, to make sure, only certain people can access your services via a secure VPN.
 - [AdGuard Home](https://adguard.com/): Server side ad blocking, to remove ads and other malicious content before it reaches your computer. Can also act as a DNS/DHCP server.
 - [Immich](https://immich.app/): Photos library, to make photo collection easy, can include automatic face recognition, tagging, and much more, great Google/Apple photo alternative.
@@ -95,6 +101,7 @@ yoc/
 |   ├── audiobookshelf.yaml
 |   ├── immich.yaml
 │   ├── nextcloud.yaml
+│   ├── owncloud.yaml
 │   ├── seafile.yaml
 │   ├── traefik.yaml
 │   ├── vaultwarden.yaml
@@ -105,6 +112,7 @@ yoc/
 |   ├── audiobookshelf
 |   ├── immich
 │   ├── nextcloud
+│   ├── owncloud
 │   ├── seafile
 │   ├── traefik
 │   ├── vaultwarden
@@ -121,6 +129,7 @@ Also please support the developpers of:
 - [Vaultwarden](https://github.com/dani-garcia/vaultwarden)
 - [Seafile](https://www.seafile.com/)
 - [Nextcloud](https://nextcloud.com/)
+- [Owncloud](https://owncloud.com/)
 - [wg-easy](https://github.com/wg-easy/wg-easy)
 - [AdGuard Home](https://adguard.com/)
 - [Immich](https://immich.app/)

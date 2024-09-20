@@ -37,7 +37,7 @@ services:
       - MYSQL_HOST=nextcloud-db
       - REDIS_HOST=nextcloud-redis
       - NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.${DOMAIN_NAME}
-      - TRUSTED_PROXIES=traefik
+      - TRUSTED_PROXIES=172.19.0.0/16
       - OVERWRITEPROTOCOL=https
     volumes:
       - ${CONTAINERS_DATA}/nextcloud/www:/var/www/html
@@ -49,3 +49,12 @@ services:
       - traefik.http.routers.nextcloud.entrypoints=websecure
       - traefik.http.routers.nextcloud.tls=true
       - traefik.http.routers.nextcloud.tls.certresolver=letsencrypt
+      - traefik.http.routers.nextcloud.tls.certresolver=myresolver
+      - traefik.http.routers.nextcloud.middlewares=nextcloud-headers,nextcloud-dav
+      - traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=15552000
+      - traefik.http.middlewares.nextcloud-headers.headers.stsIncludeSubdomains=true
+      - traefik.http.middlewares.nextcloud-headers.headers.stsPreload=true
+      - traefik.http.middlewares.nextcloud-headers.headers.forceSTSHeader=true
+      - traefik.http.middlewares.nextcloud-dav.redirectregex.regex=https://(.*)/.well-known/(card|cal)dav
+      - traefik.http.middlewares.nextcloud-dav.redirectregex.replacement=https://$$1/remote.php/dav/
+      - traefik.http.middlewares.nextcloud-dav.redirectregex.permanent=true

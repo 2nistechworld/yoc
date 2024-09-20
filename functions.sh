@@ -66,6 +66,12 @@ if [ -f "$YOC_CLI" ]; then
     NETXCLOUD_ALREADY_INSTALLED=off
   fi
 
+  if [[ $SERVICES_INSTALLED == *'owncloud.yaml'* ]]; then
+    OWNCLOUD_ALREADY_INSTALLED=on
+  else
+    OWNCLOUD_ALREADY_INSTALLED=off
+  fi
+
   if [[ $SERVICES_INSTALLED == *'immich.yaml'* ]]; then
     IMMICH_ALREADY_INSTALLED=on
    else
@@ -102,6 +108,7 @@ if [ -f "$YOC_CLI" ]; then
     TRAEFIK_ALREADY_INSTALLED=off
     WG_EASY_ALREADY_INSTALLED=off
     NETXCLOUD_ALREADY_INSTALLED=off
+    OWNCLOUD_ALREADY_INSTALLED=off
     IMMICH_ALREADY_INSTALLED=off
     VAULTWARDEN_ALREADY_INSTALLED=off
     HOMEASSISTANT_ALREADY_INSTALLED=off
@@ -172,6 +179,10 @@ fi
 
 if [[ $NEXTCLOUD == 1 ]]; then
   echo "nextcloud.$DOMAIN_NAME" >> dns.list
+fi
+
+if [[ $OWNCLOUD == 1 ]]; then
+  echo "owncloud.$DOMAIN_NAME" >> dns.list
 fi
 
 if [[ $WG_EASY == 1 ]]; then
@@ -261,11 +272,20 @@ install_wg_easy_or_adguardghome () {
 }
 
 configure_vaultwarden () {
-    whiptail --title "YOC Installation - Vaultwarden" --msgbox "To configure the push notification for mobile devices\nGo to https://bitwarden.com/host/ and follow the steps to get your key and ID." 8 78
-    PUSH_INSTALLATION_ID=$(whiptail --title="YOC Installation - Vaultwarden" --inputbox "Installation ID:" 8 78 3>&1 1>&2 2>&3)
-    whiptail_cancel_escape
-    PUSH_INSTALLATION_KEY=$(whiptail --title="YOC Installation - Vaultwarden" --inputbox "Installation Key:" 8 78 3>&1 1>&2 2>&3)
-    whiptail_cancel_escape
+  whiptail --title "YOC Installation" --yesno "Do you want to configure push notification for Vaultwarrden?" 8 78
+    if [[ $? -eq 0 ]]; then
+      whiptail --title "YOC Installation" --msgbox "To configure the push notification for mobile devices\nGo to https://bitwarden.com/host/ and follow the steps to get your key and ID." 20 78
+      PUSH_INSTALLATION_ID=$(whiptail --title="YOC Installation - Vaultwarden" --inputbox "Installation ID:" 8 78 3>&1 1>&2 2>&3)
+      whiptail_cancel_escape
+      PUSH_INSTALLATION_KEY=$(whiptail --title="YOC Installation - Vaultwarden" --inputbox "Installation Key:" 8 78 3>&1 1>&2 2>&3)
+      whiptail_cancel_escape
+      PUSH_ENABLED=1
+    elif [[ $? -eq 1 ]]; then
+      whiptail --title "YOC Installation" --msgbox "OK, Vaultwarden will not use the Push notification." 8 78
+      PUSH_ENABLED=0
+    elif [[ $? -eq 255 ]]; then 
+      whiptail --title "YOC Installation" --msgbox "User pressed ESC. Exiting the script" 8 78
+    fi
 }
 
 configure_cloudflare () {
