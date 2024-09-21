@@ -21,7 +21,6 @@ whiptail --title="YOC Installation" --checklist --separate-output "What do you w
 "Owncloud" "DropBox Like with more functionnaliies." $OWNCLOUD_ALREADY_INSTALLED \
 "Immich" "Self-hosted photo and video backup solution" $IMMICH_ALREADY_INSTALLED \
 "Wg-Easy" "VPN Server using Wireguard" $WG_EASY_ALREADY_INSTALLED \
-"HomeAssistant" "Domotic platform" $HOMEASSISTANT_ALREADY_INSTALLED \
 "Audiobookshelf" "Audiobooks/Podcast and Ebook streaming" $AUDIOBOOKSHELF_ALREADY_INSTALLED \
 "Paperless-Ngx" "Document management system, with OCR" $PAPERLESS_ALREADY_INSTALLED \
 "AdguardHome" "AD Blocker DNS/DHCP Server" $ADGUARDHOME_ALREADY_INSTALLED 2>results
@@ -50,9 +49,6 @@ do
         ;;
       Wg-Easy)
         WG_EASY=1
-        ;;
-      HomeAssistant)
-        HOMEASSISTANT=1
         ;;
       Audiobookshelf)
         AUDIOBOOKSHELF=1
@@ -106,7 +102,7 @@ if  [[ $TRAEFIK_ALREADY_INSTALLED == off ]]; then
   #If Traefik selected ask if we want to use Cloudflare DNS for SSL
   if [[ $TRAEFIK == 1 ]]
   then
-    if [[ $NEXTCLOUD == 1 ]] || [[ $OWNCLOUD == 1 ]] || [[ $VAULTWARDEN == 1 ]] || [[ $SEAFILE == 1 ]] || [[ $IMMICH == 1 ]] || [[ $HOMEASSISTANT == 1 ]] || [[ $AUDIOBOOKSHELF == 1 ]] || [[ $PAPERLESS == 1 ]]
+    if [[ $NEXTCLOUD == 1 ]] || [[ $OWNCLOUD == 1 ]] || [[ $VAULTWARDEN == 1 ]] || [[ $SEAFILE == 1 ]] || [[ $IMMICH == 1 ]] || [[ $AUDIOBOOKSHELF == 1 ]] || [[ $PAPERLESS == 1 ]]
     then
       whiptail --title "YOC Installation" --yesno "Do you want to use Cloudflare DNS to confgure SSL for Traefik?." 8 78
           if [[ $? -eq 0 ]]; then
@@ -236,11 +232,12 @@ if [[ $WG_EASY_ALREADY_INSTALLED == off ]]; then
   if [[ $WG_EASY == 1 ]]; then
     cp compose_files/wg_easy.yaml $COMPOSE_FILES_FOLDER
     WG_EASY_PASSWORD=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 35 ; echo '')
-    sed -i "s;<WG_EASY_PASSWORD>;$WG_EASY_PASSWORD;g" $ENV_FILE
+    WG_EASY_PASSWORD_HASH=$(docker run -it ghcr.io/wg-easy/wg-easy wgpw $WG_EASY_PASSWORD | cut -d "'" -f2 | sed 's/\$/\$$/g')
+    sed -i "s;<WG_EASY_PASSWORD_HASH>;$WG_EASY_PASSWORD_HASH;g" $ENV_FILE
     #Wg-Easy && AdguardHome
     if [[ $ADGUARDHOME == 1 ]]
       then
-      sed -i "s;<WG_DEFAULT_DNS>;172.8.0.53;g" $ENV_FILE
+      sed -i "s;<WG_DEFAULT_DNS>;172.19.0.53;g" $ENV_FILE
       else
       sed -i "s;<WG_DEFAULT_DNS>;1.1.1.1;g" $ENV_FILE
     fi
@@ -275,18 +272,6 @@ if [[ $ADGUARDHOME_ALREADY_INSTALLED == off ]]; then
     echo "AdGuard Home Password: $ADGUARDHOME_PASSWORD" >> $INFOS_TXT
     echo "You can use $SERVER_IP as DNS Server to resolve localy $DOMAIN_NAME" >> $INFOS_TXT
     echo " " >> $INFOS_TXT
-  fi
-fi
-
-if [[ $HOMEASSISTANT_ALREADY_INSTALLED == off ]]; then
-  if [[ $HOMEASSISTANT == 1 ]]; then
-    cp compose_files/homeassistant.yaml $COMPOSE_FILES_FOLDER
-    mkdir -p $CONTAINERS_DATA/homeassistant
-    cp config_files/HomeAssistant.yaml $CONTAINERS_DATA/homeassistant/configuration.yaml
-    touch $CONTAINERS_DATA/homeassistant/{automations.yaml,scripts.yaml,scenes.yaml}
-    echo "Home Assistant" >> $INFOS_TXT
-    echo "URL: https://homeassistant.$DOMAIN_NAME or http://$SERVER_IP:8123" >> $INFOS_TXT
-    echo " " >> $INFOS_TXT    
   fi
 fi
 

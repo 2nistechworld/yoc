@@ -7,8 +7,8 @@ services:
     image: mariadb:10.11
     container_name: seafile-db
     environment:
-      - MYSQL_ROOT_PASSWORD=${SEAFILE_MYSQL_PASSWORD}
-      - MYSQL_LOG_CONSOLE=true
+      MYSQL_ROOT_PASSWORD: ${SEAFILE_MYSQL_PASSWORD}
+      MYSQL_LOG_CONSOLE: true
     volumes:
       - ${CONTAINERS_DATA}/seafile/db:/var/lib/mysql
     restart: always
@@ -31,12 +31,12 @@ services:
     volumes:
       - ${CONTAINERS_DATA}/seafile/shared:/shared
     environment:
-      - DB_HOST=seafile-db
-      - DB_ROOT_PASSWD=${SEAFILE_MYSQL_PASSWORD}
-      - SEAFILE_ADMIN_EMAIL=${EMAIL_ADDRESS}
-      - SEAFILE_ADMIN_PASSWORD=${SEAFILE_ADMIN_PASSWORD}
-      - SEAFILE_SERVER_HOSTNAME=seafile.${DOMAIN_NAME}
-      - CSRF_TRUSTED_ORIGINS=seafile.${DOMAIN_NAME}
+      DB_HOST: seafile-db
+      DB_ROOT_PASSWD: ${SEAFILE_MYSQL_PASSWORD}
+      SEAFILE_ADMIN_EMAIL: ${EMAIL_ADDRESS}
+      SEAFILE_ADMIN_PASSWORD: ${SEAFILE_ADMIN_PASSWORD}
+      SEAFILE_SERVER_HOSTNAME: seafile.${DOMAIN_NAME}
+      CSRF_TRUSTED_ORIGINS: seafile.${DOMAIN_NAME}
     depends_on:
       - seafile-db
       - memcached
@@ -44,7 +44,7 @@ services:
     networks:
       yoc_network:
     labels:
+      - traefik.enable=true
       - traefik.http.routers.seafile.rule=Host(`seafile.${DOMAIN_NAME}`)
       - traefik.http.routers.seafile.entrypoints=websecure
-      - traefik.http.routers.seafile.tls=true
-      - traefik.http.routers.seafile.tls.certresolver=letsencrypt
+      - traefik.http.routers.seafile.tls.certresolver=myresolver

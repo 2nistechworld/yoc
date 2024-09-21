@@ -5,22 +5,21 @@ networks:
 services:
   traefik:
     container_name: traefik
-    image: traefik:v2.10
+    image: traefik:v3.1
     command:
       - --api.insecure=true
-      - --providers.docker
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
       - --entryPoints.websecure.address=:443
-      - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
-      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
-      - --certificatesresolvers.letsencrypt.acme.email=${EMAIL_ADDRESS}
-      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
-      - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN_NAME}
-      - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN_NAME}
+      - --entrypoints.websecure.http.tls=true
+      - --certificatesresolvers.myresolver.acme.dnschallenge=true
+      - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.myresolver.acme.email=${EMAIL_ADDRESS}
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
     environment:
-      - CF_DNS_API_TOKEN=${CLOUDFLARE_API_KEY}
+      CF_DNS_API_TOKEN: ${CLOUDFLARE_API_KEY}
     ports:
       - 443:443
-      # The Web UI (enabled by --api.insecure=true)
       - 8080:8080
     volumes:
       # So that Traefik can listen to the Docker events

@@ -4,18 +4,18 @@ networks:
     external: true
 services:
   wg-easy:
-    environment:
-      - PASSWORD=${WG_EASY_PASSWORD}
-      - WG_HOST=vpn.${DOMAIN_NAME}
-      - WG_PORT=51820
-      - WG_DEFAULT_DNS=${WG_DEFAULT_DNS}
     image: ghcr.io/wg-easy/wg-easy
     container_name: wg-easy
+    environment:
+      PASSWORD_HASH: ${WG_EASY_PASSWORD_HASH}
+      WG_HOST: vpn.${DOMAIN_NAME}
+      WG_PORT: 51820
+      WG_DEFAULT_DNS: ${WG_DEFAULT_DNS}
     volumes:
       - ${CONTAINERS_DATA}/wireguard:/etc/wireguard
     ports:
-      - "51820:51820/udp"
-      - "51821:51821/tcp"
+      - 51820:51820/udp
+      - 51821:51821/tcp
     cap_add:
       - NET_ADMIN
       - SYS_MODULE

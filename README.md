@@ -2,6 +2,12 @@
 <img src="/images/install.gif" width="500px">
 
 ## Updates
+2024-09-21:
+- Remove Home Assistant
+- Update to Traefik V3
+- Some cosmetic changes in compose files files
+- Configure new PASSWORD_HASH for WG-EASY
+
 2024-09-20: 
 - Add Owncloud
 - Update Traefik configuration for Nextcloud
@@ -75,8 +81,7 @@ This installation Wizard will install the followings services depending of your 
 ```
 git clone https://github.com/2nistechworld/yoc.git
 cd yoc
-chmod +x install.sh
-(sudo) ./install.sh
+bash install.sh
 ```
 And follow the instructions.
 

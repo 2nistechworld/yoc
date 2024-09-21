@@ -59,10 +59,9 @@ services:
     networks:
       yoc_network:
     labels:
-      - traefik.http.services.paperless-ngx-webserver.loadbalancer.server.port=8000
+      - traefik.enable=true
       - traefik.http.routers.paperless-ngx-webserver.rule=Host(`paperless-ngx.${DOMAIN_NAME}`)
       - traefik.http.routers.paperless-ngx-webserver.entrypoints=websecure
-      - traefik.http.routers.paperless-ngx-webserver.tls=true
       - traefik.http.routers.paperless-ngx-webserver.tls.certresolver=myresolver
 
   paperless-ngx-gotenberg:

@@ -84,12 +84,6 @@ if [ -f "$YOC_CLI" ]; then
     VAULTWARDEN_ALREADY_INSTALLED=off
   fi
 
-  if [[ $SERVICES_INSTALLED == *'homeassistant.yaml'* ]]; then
-    HOMEASSISTANT_ALREADY_INSTALLED=on
-  else
-    HOMEASSISTANT_ALREADY_INSTALLED=off
-  fi
-
   if [[ $SERVICES_INSTALLED == *'audiobookshelf.yaml'* ]]; then
     AUDIOBOOKSHELF_ALREADY_INSTALLED=on
   else
@@ -111,7 +105,6 @@ if [ -f "$YOC_CLI" ]; then
     OWNCLOUD_ALREADY_INSTALLED=off
     IMMICH_ALREADY_INSTALLED=off
     VAULTWARDEN_ALREADY_INSTALLED=off
-    HOMEASSISTANT_ALREADY_INSTALLED=off
     AUDIOBOOKSHELF_ALREADY_INSTALLED=off
     PAPERLESS_ALREADY_INSTALLED=off
 fi
@@ -193,9 +186,6 @@ if [[ $IMMICH == 1 ]]; then
   echo "immich.$DOMAIN_NAME" >> dns.list
 fi
 
-if [[ $HOMEASSISTANT == 1 ]]; then
-  echo "homeassistant.$DOMAIN_NAME" >> dns.list
-fi
 if [[ $AUDIOBOOKSHELF == 1 ]]; then
   echo "audiobookshelf.$DOMAIN_NAME" >> dns.list
 fi

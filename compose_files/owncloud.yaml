@@ -12,18 +12,18 @@ services:
       - owncloud-mariadb
       - owncloud-redis
     environment:
-      - OWNCLOUD_DOMAIN=owncloud.${DOMAIN_NAME}
-      - OWNCLOUD_TRUSTED_DOMAINS=owncloud.${DOMAIN_NAME}
-      - OWNCLOUD_DB_TYPE=mysql
-      - OWNCLOUD_DB_NAME=owncloud
-      - OWNCLOUD_DB_USERNAME=owncloud
-      - OWNCLOUD_DB_PASSWORD=${OWNCLOUD_DB_PASSWORD}
-      - OWNCLOUD_DB_HOST=owncloud-mariadb
-      - OWNCLOUD_ADMIN_USERNAME=${OWNCLOUD_ADMIN_USERNAME}
-      - OWNCLOUD_ADMIN_PASSWORD=${OWNCLOUD_ADMIN_PASSWORD}   
-      - OWNCLOUD_MYSQL_UTF8MB4=true
-      - OWNCLOUD_REDIS_ENABLED=true
-      - OWNCLOUD_REDIS_HOST=owncloud-redis
+      OWNCLOUD_DOMAIN: owncloud.${DOMAIN_NAME}
+      OWNCLOUD_TRUSTED_DOMAINS: owncloud.${DOMAIN_NAME}
+      OWNCLOUD_DB_TYPE: mysql
+      OWNCLOUD_DB_NAME: owncloud
+      OWNCLOUD_DB_USERNAME: owncloud
+      OWNCLOUD_DB_PASSWORD: ${OWNCLOUD_DB_PASSWORD}
+      OWNCLOUD_DB_HOST: owncloud-mariadb
+      OWNCLOUD_ADMIN_USERNAME: ${OWNCLOUD_ADMIN_USERNAME}
+      OWNCLOUD_ADMIN_PASSWORD: ${OWNCLOUD_ADMIN_PASSWORD}
+      OWNCLOUD_MYSQL_UTF8MB4: true
+      OWNCLOUD_REDIS_ENABLED: true
+      OWNCLOUD_REDIS_HOST: owncloud-redis
     healthcheck:
       test: ["CMD", "/usr/bin/healthcheck"]
       interval: 30s
@@ -35,10 +35,9 @@ services:
     networks:
       yoc_network:
     labels:
-      - traefik.http.services.owncloud.loadbalancer.server.port=8080
+      - traefik.enable=true
       - traefik.http.routers.owncloud.rule=Host(`owncloud.${DOMAIN_NAME}`)
       - traefik.http.routers.owncloud.entrypoints=websecure
-      - traefik.http.routers.owncloud.tls=true
       - traefik.http.routers.owncloud.tls.certresolver=myresolver
       - traefik.http.routers.owncloud.middlewares=owncloud-headers,owncloud-dav
       - traefik.http.middlewares.owncloud-headers.headers.stsSeconds=15552000
@@ -53,11 +52,11 @@ services:
     image: mariadb:10.11 # minimum required ownCloud version is 10.9
     container_name: owncloud-mariadb
     environment:
-      - MYSQL_ROOT_PASSWORD=${OWNCLOUD_MYSQL_ROOT_PASSWORD}
-      - MYSQL_USER=owncloud
-      - MYSQL_PASSWORD=${OWNCLOUD_DB_PASSWORD}
-      - MYSQL_DATABASE=owncloud
-      - MARIADB_AUTO_UPGRADE=1
+      MYSQL_ROOT_PASSWORD: ${OWNCLOUD_MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: owncloud
+      MYSQL_PASSWORD: ${OWNCLOUD_DB_PASSWORD}
+      MYSQL_DATABASE: owncloud
+      MARIADB_AUTO_UPGRADE: 1
     command: ["--max-allowed-packet=128M", "--innodb-log-file-size=64M"]
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=${OWNCLOUD_MYSQL_ROOT_PASSWORD}"]

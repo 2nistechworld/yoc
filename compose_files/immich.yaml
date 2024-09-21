@@ -17,10 +17,9 @@ services:
       - immich_redis
       - immich_postgres
     labels:
-      - traefik.http.services.immich-server.loadbalancer.server.port=3001
+      - traefik.enable=true
       - traefik.http.routers.immich-server.rule=Host(`immich.${DOMAIN_NAME}`)
       - traefik.http.routers.immich-server.entrypoints=websecure
-      - traefik.http.routers.immich-server.tls=true
       - traefik.http.routers.immich-server.tls.certresolver=myresolver
     restart: always
     networks:

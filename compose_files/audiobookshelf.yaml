@@ -13,10 +13,11 @@ services:
       - ${CONTAINERS_DATA}/audiobookshelf/podcasts:/podcasts
       - ${CONTAINERS_DATA}/audiobookshelf/config:/config
       - ${CONTAINERS_DATA}/audiobookshelf/metadata:/metadata
+    restart: always
     networks:
       yoc_network:
     labels:
+      - traefik.enable=true
       - traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.${DOMAIN_NAME}`)
       - traefik.http.routers.audiobookshelf.entrypoints=websecure
-      - traefik.http.routers.audiobookshelf.tls=true
-      - traefik.http.routers.audiobookshelf.tls.certresolver=letsencrypt
+      - traefik.http.routers.audiobookshelf.tls.certresolver=myresolver

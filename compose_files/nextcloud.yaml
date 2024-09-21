@@ -11,10 +11,10 @@ services:
     volumes:
       - ${CONTAINERS_DATA}/nextcloud/db:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=${NEXTCLOUD_ROOT_MYSQL_PASSWORD}
-      - MYSQL_PASSWORD=${NEXTCLOUD_MYSQL_PASSWORD}
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
+      MYSQL_ROOT_PASSWORD: ${NEXTCLOUD_ROOT_MYSQL_PASSWORD}
+      MYSQL_PASSWORD: ${NEXTCLOUD_MYSQL_PASSWORD}
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
     networks:
       yoc_network:
 
@@ -31,24 +31,23 @@ services:
     ports:
       - 8082:80
     environment:
-      - MYSQL_PASSWORD=${NEXTCLOUD_MYSQL_PASSWORD}
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
-      - MYSQL_HOST=nextcloud-db
-      - REDIS_HOST=nextcloud-redis
-      - NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.${DOMAIN_NAME}
-      - TRUSTED_PROXIES=172.19.0.0/16
-      - OVERWRITEPROTOCOL=https
+      MYSQL_PASSWORD: ${NEXTCLOUD_MYSQL_PASSWORD}
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_HOST: nextcloud-db
+      REDIS_HOST: nextcloud-redis
+      NEXTCLOUD_TRUSTED_DOMAINS: nextcloud.${DOMAIN_NAME}
+      TRUSTED_PROXIES: 172.19.0.0/16
+      OVERWRITEPROTOCOL: https
     volumes:
       - ${CONTAINERS_DATA}/nextcloud/www:/var/www/html
-    restart: always
+    restart: "always"
     networks:
       yoc_network:
     labels:
+      - traefik.enable=true
       - traefik.http.routers.nextcloud.rule=Host(`nextcloud.${DOMAIN_NAME}`)
       - traefik.http.routers.nextcloud.entrypoints=websecure
-      - traefik.http.routers.nextcloud.tls=true
-      - traefik.http.routers.nextcloud.tls.certresolver=letsencrypt
       - traefik.http.routers.nextcloud.tls.certresolver=myresolver
       - traefik.http.routers.nextcloud.middlewares=nextcloud-headers,nextcloud-dav
       - traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=15552000
