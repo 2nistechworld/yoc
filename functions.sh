@@ -138,7 +138,7 @@ OS_ID=$(. /etc/os-release && echo "$ID")
     Suites: $OS_VERSION
     Components: stable
     Signed-By: /etc/apt/keyrings/docker.asc 
-    EOF
+EOF
     apt update
     apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 }
