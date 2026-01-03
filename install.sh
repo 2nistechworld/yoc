@@ -22,7 +22,6 @@ whiptail --title="YOC Installation" --checklist --separate-output "What do you w
 "Immich" "Self-hosted photo and video backup solution" $IMMICH_ALREADY_INSTALLED \
 "Wg-Easy" "VPN Server using Wireguard" $WG_EASY_ALREADY_INSTALLED \
 "Audiobookshelf" "Audiobooks/Podcast and Ebook streaming" $AUDIOBOOKSHELF_ALREADY_INSTALLED \
-"Paperless-Ngx" "Document management system, with OCR" $PAPERLESS_ALREADY_INSTALLED \
 "AdguardHome" "AD Blocker DNS/DHCP Server" $ADGUARDHOME_ALREADY_INSTALLED 2>results
 whiptail_cancel_escape
 
@@ -52,10 +51,7 @@ do
         ;;
       Audiobookshelf)
         AUDIOBOOKSHELF=1
-        ;;   
-      Paperless-Ngx)
-        PAPERLESS=1
-        ;;              
+        ;;            
       AdguardHome)
         AUDIOBOOKSHELF=1
         ;;
@@ -102,7 +98,7 @@ if  [[ $TRAEFIK_ALREADY_INSTALLED == off ]]; then
   #If Traefik selected ask if we want to use Cloudflare DNS for SSL
   if [[ $TRAEFIK == 1 ]]
   then
-    if [[ $NEXTCLOUD == 1 ]] || [[ $OWNCLOUD == 1 ]] || [[ $VAULTWARDEN == 1 ]] || [[ $SEAFILE == 1 ]] || [[ $IMMICH == 1 ]] || [[ $AUDIOBOOKSHELF == 1 ]] || [[ $PAPERLESS == 1 ]]
+    if [[ $NEXTCLOUD == 1 ]] || [[ $OWNCLOUD == 1 ]] || [[ $VAULTWARDEN == 1 ]] || [[ $SEAFILE == 1 ]] || [[ $IMMICH == 1 ]] || [[ $AUDIOBOOKSHELF == 1 ]]
     then
       whiptail --title "YOC Installation" --yesno "Do you want to use Cloudflare DNS to confgure SSL for Traefik?." 8 78
           if [[ $? -eq 0 ]]; then
@@ -280,25 +276,6 @@ if [[ $AUDIOBOOKSHELF_ALREADY_INSTALLED == off ]]; then
     cp compose_files/audiobookshelf.yaml $COMPOSE_FILES_FOLDER
     echo "Audiobookshelf" >> $INFOS_TXT
     echo "URL: https://audiobookshelf.$DOMAIN_NAME or http://$SERVER_IP:13378" >> $INFOS_TXT
-    echo " " >> $INFOS_TXT    
-  fi
-fi
-
-if [[ $PAPERLESS_ALREADY_INSTALLED == off ]]; then
-  if [[ $PAPERLESS == 1 ]]; then
-    cp compose_files/paperless-ngx.yaml $COMPOSE_FILES_FOLDER
-    MARIADB_PASSWORD=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 35 ; echo '')
-    sed -i "s;<MARIADB_PASSWORD>;$MARIADB_PASSWORD;g" $ENV_FILE
-    MARIADB_ROOT_PASSWORD=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 35 ; echo '')
-    sed -i "s;<MARIADB_ROOT_PASSWORD>;$MARIADB_ROOT_PASSWORD;g" $ENV_FILE
-    PAPERLESS_SECRET_KEY=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 35 ; echo '')
-    sed -i "s;<PAPERLESS_SECRET_KEY>;$PAPERLESS_SECRET_KEY;g" $ENV_FILE
-    PAPERLESS_ADMIN_PASSWORD=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 35 ; echo '')
-    sed -i "s;<PAPERLESS_ADMIN_PASSWORD>;$PAPERLESS_ADMIN_PASSWORD;g" $ENV_FILE    
-    echo "Paperless-Ngx" >> $INFOS_TXT
-    echo "URL: https://paperless-ngx.$DOMAIN_NAME or http://$SERVER_IP:8000" >> $INFOS_TXT
-    echo "Paperless-Ngx Username: $EMAIL_ADDRESS" >> $INFOS_TXT
-    echo "Paperless-Ngx Password: $PAPERLESS_ADMIN_PASSWORD" >> $INFOS_TXT
     echo " " >> $INFOS_TXT    
   fi
 fi
