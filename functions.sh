@@ -4,7 +4,7 @@ check_os_installed () {
 #Check if a supported distribution is installed
 OS_VERSION=$(. /etc/os-release && echo "$VERSION_CODENAME")
 case "$OS_VERSION" in
-   bookworm|bullseye|lunar|kinetic|jammy|focal)
+   bookworm|bullseye|lunar|kinetic|jammy|focal|noble)
                  echo "You are running a supported version"
                  ;; # and exit the case
    *)            echo "You are running an unsupported version"
@@ -130,14 +130,17 @@ OS_ID=$(. /etc/os-release && echo "$ID")
     apt upgrade -y
     apt install ca-certificates curl gnupg -y
     install -m 0755 -d /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/$OS_ID/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-    chmod a+r /etc/apt/keyrings/docker.gpg
-    echo \
-    "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$OS_ID \
-    "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-    tee /etc/apt/sources.list.d/docker.list > /dev/null
+    curl -fsSL https://download.docker.com/linux/$OS_ID/gpg -o /etc/apt/keyrings/docker.asc
+    chmod a+r /etc/apt/keyrings/docker.asc
+    tee /etc/apt/sources.list.d/docker.sources <<EOF
+    Types: deb
+    URIs: https://download.docker.com/linux/$OS_ID
+    Suites: $OS_VERSION
+    Components: stable
+    Signed-By: /etc/apt/keyrings/docker.asc 
+    EOF
     apt update
-    apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+    apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 }
 
 check_if_docker_working () {
